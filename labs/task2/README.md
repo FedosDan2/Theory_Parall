@@ -17,7 +17,7 @@ cmake --build build
 ##### Вариант 0: Компиляция всех задач
 ```bash
 cd 3
-cmake -DSUM=1 -B build -S .
+cmake -DSUM=0 -B build -S .
 cmake --build build
 ```
 
