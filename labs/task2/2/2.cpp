@@ -14,14 +14,12 @@
 const double h =  (B - A) / N_STEPS;
 
 
-double func(double x)
-{
+double func(double x){
     return exp(-x * x);
 }
 
 
-double integrate()
-{
+double integrate(){
     double sum = 0.0;
 
     for (int i = 0; i < N_STEPS; i++)
@@ -56,8 +54,7 @@ double integrate_omp(int num_threads)
     return sum;
 }
 
-double run_parallel(int num_threads)
-{
+double run_parallel(int num_threads){
     double t = omp_get_wtime();
     double res = integrate_omp(num_threads);
     t = omp_get_wtime() - t;
@@ -73,17 +70,26 @@ int main()
 
     printf("Integration f(x) on [%.12f, %.12f], N_STEPS = %d\n", A, B, N_STEPS);
     
+    int create_average_result = 20;
+    // запускаем на одно несколько раз чтобы получить среднее
     for (size_t i = 0; i < list_threads.size(); i++){
-        results[i] = run_parallel(list_threads[i]);
+        double average_results_thread = 0.0;
+
+        for (size_t j = 0; j < create_average_result; j++){
+            average_results_thread += run_parallel(list_threads[i]);
+        }
+        results[i] = average_results_thread / create_average_result;
     }
 
     FILE* file = fopen("results/results2.txt", "w");
     if (file) {
-        fprintf(file, "%-10s %15s %15s\n", "Threads(I)", "Time(sec)(T_i)", "Gain(S)");
+        fprintf(file, "%s %d %s\n", "Average Results after", create_average_result, "operations:");
+        fprintf(file, "%10s %15s %15s %15s\n", "Threads(I)", "Time(sec)(T_i)", "Gain(S)", "Gain Modified(S)");
         
         for (size_t i = 0; i < list_threads.size(); i++) {
             double gain =  results[0] / results[i];
-            fprintf(file, "%10d %15.6f %15.6f\n", list_threads[i], results[i], gain);
+            double gain_modified = gain / list_threads[i];
+            fprintf(file, "%10d %15.6f %15.6f %15.6f\n", list_threads[i], results[i], gain, gain_modified);
         }
         fclose(file);
         printf("Results saved to results2.txt\n");

@@ -1,0 +1,31 @@
+
+N = 1000
+Average Results after 20 operations on 8 threads:
+Type schedule          Chunks            Time
+static                   1        7.930094
+static                   4        8.219548
+static                   8        8.275944
+static                  16        8.315046
+static                  32        8.388228
+static                  64        8.304479
+static                 128        7.992823
+static                 256        0.001919
+
+dynamic                  1        8.362376
+dynamic                  4        7.915950
+dynamic                  8        7.596352
+dynamic                 16        3.847882
+dynamic                 32        2.000995
+dynamic                 64        0.690629
+dynamic                128        0.047359
+dynamic                256        0.005758
+
+guided                   1        0.867519
+guided                   4        0.091755
+guided                   8        0.050072
+guided                  16        0.024694
+guided                  32        0.022928
+guided                  64        0.013080
+guided                 128        0.005770
+guided                 256        0.007713
+
