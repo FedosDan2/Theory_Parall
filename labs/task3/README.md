@@ -16,3 +16,9 @@ cmake -S . -B build
 cmake --build build
 ./build/jthr_runner
 ```
+
+#### 2 задача
+```bash
+cd 2
+./start.sh
+```

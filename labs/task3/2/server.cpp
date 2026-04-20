@@ -11,11 +11,6 @@
 #include <fstream> 
 #include <random>
 
-
-
-/*
-    Функции для вычисления
-*/
 template<typename T>
 T func_pow(T x, T y){
     return static_cast<T>(std::pow(x, y));
@@ -32,12 +27,11 @@ T func_add(T x, T y, T z){
 }
 
 
-
 template<typename T>
 class Server {
 private:
-    bool stop = false;
-    size_t count_tasks_id = 0;
+    std::atomic<bool> stop{false};
+    std::atomic<size_t> count_tasks_id{0};
     
     using TaskWrapper = std::function<T()>;
     std::queue<std::pair<size_t, TaskWrapper>> tasks;
@@ -60,9 +54,9 @@ private:
             if (!tasks.empty()) {
                 auto [task_id, task] = std::move(tasks.front());
                 tasks.pop();
-                lock.unlock();  // Освобождаем мьютекс очереди на время выполнения
+                lock.unlock();
                 
-                T result = task();  // Выполняем задачу
+                T result = task();
                 
                 {
                     std::lock_guard<std::mutex> res_lock(res_mutex);
